@@ -4,8 +4,8 @@
 	<meta charset="utf-8">
 	<title>Test</title>
 	<!-- link rel="stylesheet" href="css/style.css" -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArmUsycmrdOwDG6Or30TRrztbyGhMqOpY"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyArmUsycmrdOwDG6Or30TRrztbyGhMqOpY"></script>
 
 	<script>
 $(document).ready(function() {
@@ -20,7 +20,7 @@ $(document).ready(function() {
 
     var getWeather = function(city, code)
     {
-        url = "http://api.openweathermap.org/data/2.5/weather?q=" +
+        url = "//api.openweathermap.org/data/2.5/weather?q=" +
             city + "," + code + "&APPID=5f92706a049249a89672de4c3e50353e";
         console.log(url);
         $.getJSON(url, function(data) {
@@ -36,7 +36,7 @@ $(document).ready(function() {
 
     var getCountry = function()
     {
-        url = "https://restcountries.eu/rest/v2/name/" + encodeURIComponent($('#country-name').val().toLowerCase())
+        url = "//restcountries.eu/rest/v2/name/" + encodeURIComponent($('#country-name').val().toLowerCase())
             + "?fields=name;capital;"
         console.log(url);
         $.getJSON(url, function(data) {
