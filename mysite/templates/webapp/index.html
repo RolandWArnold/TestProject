@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Test</title>
+	<!-- link rel="stylesheet" href="css/style.css" -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArmUsycmrdOwDG6Or30TRrztbyGhMqOpY"></script>
+
+	<script>
+$(document).ready(function() {
+    var getMap = function(lon, lat)
+    {
+        var mapProp = {
+            center: new google.maps.LatLng(lat, lon),
+            zoom:5,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+    }
+
+    var getWeather = function(city, code)
+    {
+        url = "http://api.openweathermap.org/data/2.5/weather?q=" +
+            city + "," + code + "&APPID=5f92706a049249a89672de4c3e50353e";
+        console.log(url);
+        $.getJSON(url, function(data) {
+            $('#country-curr-temp').html("Current temp (celsius): " + (data.main.temp -273.15).toFixed(2));
+            $('#country-max-temp').html("Max temp (celsius): " + (data.main.temp_max - 273.15).toFixed(2));
+            $('#country-min-temp').html("Min temp (celsius): " + (data.main.temp_min - 273.15).toFixed(2));
+            $('#country-wind').html("Wind: " + data.wind.speed);
+            lon = data.coord.lon;
+            lat = data.coord.lat;
+            getMap(lon, lat);
+        });
+    }
+
+    var getCountry = function()
+    {
+        url = "https://restcountries.eu/rest/v2/name/" + encodeURIComponent($('#country-name').val().toLowerCase())
+            + "?fields=name;capital;"
+        console.log(url);
+        $.getJSON(url, function(data) {
+            if (data.status == 404) {
+                $('#country-name').html('')
+            } else if (data.length) {
+                $('#info').empty();
+
+                if (data.length > 1) {
+                    var cities = "";
+                    for(var i = 0, stop = data.length; i < stop; i++) {
+                        cities += data[i].name + ", "
+                    }
+                    $('#info').html("Showing info for first city in list: " + cities)
+                }
+
+                $('#country-name-info').empty();
+                $('#country-capital-info').empty();
+                $('#country-curr-temp').empty();
+                $('#country-max-temp').empty();
+                $('#country-min-temp').empty();
+                $('#country-wind').empty();
+                $('#country-name-info').html("Country: " + data[0].name);
+                $('#country-capital-info').html("Capital: " + (data[0].capital || "Not Provided, not proceeding"));
+
+                if (!data[0].capital) {
+                    $('#country-curr-temp').clear();
+                    $('#country-max-temp').clear();
+                    $('#country-min-temp').clear();
+                    $('#country-wind').clear();
+                    $('#googleMap').clear();
+                } else {
+                    getWeather(data[0].capital, data[0].alpha2Code);
+                }
+            }
+        });
+    }
+
+    $("#target" ).submit(function(event) {
+        getCountry();
+        event.preventDefault();
+    });
+});
+	</script>
+</head>
+
+<body id="home">
+	<h1>Test</h1>
+    <form id="target" action="">
+      Country:
+      <input type="text" id="country-name" name="country"><br>
+      <input type="submit" value="Go">
+    </form>
+
+    <div id="countries">
+        <p id="info">
+        </p>
+        <p>
+            <div id="country-name-info"></div>
+            <div id="country-capital-info"></div>
+            <div id="country-curr-temp"></div>
+            <div id="country-max-temp"></div>
+            <div id="country-min-temp"></div>
+            <div id="country-wind"></div>
+            <div id="googleMap" style="width:400px;height:400px;"></div>
+        </p>
+    </div>
+</body>
+</html>
+
