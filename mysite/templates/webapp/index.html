@@ -37,7 +37,7 @@ $(document).ready(function() {
     var getCountry = function()
     {
         url = "//restcountries.eu/rest/v2/name/" + encodeURIComponent($('#country-name').val().toLowerCase())
-            + "?fields=name;capital;"
+            + "?fields=name;capital;alpha2Code;"
         console.log(url);
         $.getJSON(url, function(data) {
             if (data.status == 404) {
