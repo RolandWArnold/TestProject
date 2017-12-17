@@ -63,11 +63,11 @@ $(document).ready(function() {
                 $('#country-capital-info').html("Capital: " + (data[0].capital || "Not Provided, not proceeding"));
 
                 if (!data[0].capital) {
-                    $('#country-curr-temp').clear();
-                    $('#country-max-temp').clear();
-                    $('#country-min-temp').clear();
-                    $('#country-wind').clear();
-                    $('#googleMap').clear();
+                    $('#country-curr-temp').empty();
+                    $('#country-max-temp').empty();
+                    $('#country-min-temp').empty();
+                    $('#country-wind').empty();
+                    $('#googleMap').empty();
                 } else {
                     getWeather(data[0].capital, data[0].alpha2Code);
                 }
